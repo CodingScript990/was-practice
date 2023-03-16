@@ -2,6 +2,8 @@ package org.example.calculator.domain;
 
 import org.example.calculator.domain.*;
 import org.example.calculator.tobe.AdditionOperator;
+import org.example.calculator.tobe.ArithmeticOperator;
+import org.example.calculator.tobe.DivisionOperator;
 
 import java.util.List;
 
@@ -10,7 +12,7 @@ public class Calculator {
     // List 형태로 생성자들을 불러와서 피연산자들을 계산 할 수 있는 환경을 만들어 줌
     // Interface 를 이용하여 각 구현체들의 역할일때 사용할 수 있도록 해줌
     // 상위 Interface (EnumArithmeticOperator) -> List.of method (new 생성자들 사용!)
-    private static final List<NewArithmeticOperator> arithmeticOperator = List.of(new AdditionOperator(), new SubtractionOperator(), new MultiplicationOperator(), new DivisionOperator());
+    private static final List<ArithmeticOperator> arithmeticOperator = List.of(new AdditionOperator(), new DivisionOperator());
     // 덧셈 연산자를 사용 할 수 있게 calculate method 를 생성해줌
     // operand1, operand2 -> 피연산자!
     // operator -> 연산자!

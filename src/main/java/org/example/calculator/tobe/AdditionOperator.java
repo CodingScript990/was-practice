@@ -1,5 +1,7 @@
 package org.example.calculator.tobe;
 
+import org.example.calculator.domain.PositiveNumber;
+
 // 덧셈 연산자 -> EnumArithmeticOperator Interface 를 상속 받음!(구현체)
 public class AdditionOperator implements ArithmeticOperator {
     // Addition Operator 에 해당되면 실행!

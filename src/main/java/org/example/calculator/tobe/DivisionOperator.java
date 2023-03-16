@@ -1,7 +1,9 @@
 package org.example.calculator.tobe;
 
+import org.example.calculator.domain.PositiveNumber;
+
 // 나눗셈 연산자 -> NewArithmeticOperator Interface 를 상속 받음!(구현체)
-public class DivisionOperator implements NewArithmeticOperator {
+public class DivisionOperator implements ArithmeticOperator {
     // Division Operator 에 해당되면 실행!
 
     // Override -> boolean supports method(operator 유효성 Test)
