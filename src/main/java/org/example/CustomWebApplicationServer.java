@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.calculator.domain.Calculator;
+import org.example.calculator.domain.PositiveNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -166,12 +168,44 @@ public class CustomWebApplicationServer {
 
                     // HTTP 의 값을 체크 해보는 작업
                     // String Type line variable 초기화 작업
-                    String line;
+//                    String line;
 
                     // While 문에서 String Type variable line 이 Buffer 를 사용하여 readLine method 를 이용하여 "" 값이 아닌지 비교하여?
-                    while ((line = br.readLine()) != "") {
-                        // line 의 값을 출력해줘라! -> info 를 줄력해줘!
-                        System.out.println(line);
+                    // queryString Test 라서 이미 QueryStringLine 으로 작업을 하였기에 제거
+//                    while ((line = br.readLine()) != "") {
+//                        // line 의 값을 출력해줘라! -> info 를 줄력해줘!
+//                        System.out.println(line);
+//                    }
+
+                    // HTTP Request Constructor 에 br 를 받아오는 작업! -> First Line call
+                    HttpRequest httpRequest = new HttpRequest(br);
+
+                    // if 조건문으로 httpRequest 의 값과 calculate path 의 값이 True 인가를 비교
+                    if (httpRequest.isGetRequest() && httpRequest.matchPath("/calculate")) {
+                        // httpRequest 에서 getQueryStrings method 를 가져오는 작업!
+                        QueryStrings queryStrings = httpRequest.getQueryStrings();
+
+                        // 피연산자 1의 값을 가진 variable add -> Integer Type 으로 변환
+                        int operand1 = Integer.parseInt(queryStrings.getValue("operand1"));
+                        // 피연산자 2의 값을 가진 variable add -> Integer Type 으로 변환
+                        int operand2 = Integer.parseInt(queryStrings.getValue("operand2"));
+                        // 연산자의 값을 가진 variable add
+                        String operator = queryStrings.getValue("operator");
+
+                        // calculator 생성자에서 calculate 속성을 이용하여 new positiveNumber 생성자 Type 을 이용해 operand1, operator, operand2 를 구할 수 있도록 셋팅해줌!
+                        int result = Calculator.calculate(new PositiveNumber(operand1), operator, new PositiveNumber(operand2));
+                        // byte Array 는 result 값이 getBytes method 로 부터 전달 받아 온다는 것
+                        // string type -> byte type 으로 값을 변환 해준다는 의미
+                        byte[] body = String.valueOf(result).getBytes();
+
+                        // HTTP Response 생성자에서 DataOutputStream 을 calling 하는 작업
+                        HttpResponse response = new HttpResponse(dos);
+
+                        // Header 를 통해서 Content 의 length 를 작업해줌 -> Response
+                        // Client 와 통신을 하기 위함
+                        response.response200Header("application/json", body.length);
+
+                        response.responseBody(body);
                     }
                 }
             }

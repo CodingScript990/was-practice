@@ -3,21 +3,21 @@ package org.example;
 import java.util.Objects;
 
 // RequestLine Class
-// [First Line] 에 Method, urlPath, queryString 을 추출하는 작업을 함
+// [First Line] 에 Method, urlPath, queryStrings 을 추출하는 작업을 함
 public class RequestLine {
     // method Variable -> Method(방식)
     private final String method; // GET
     // urlPath Variable -> url(경로) part
     private final String urlPath; // /calculate
-    // queryString Variable -> query String
-    private String queryString; // operand1=11&operand1=11&operator=*&operand2=55
+    // queryStrings Variable -> query String
+    private QueryStrings queryStrings; // operand1=11&operand1=11&operator=*&operand2=55
 
     // RequestLine Constructor add
-    public RequestLine(String method, String urlPath, String queryString) {
-        // method, urlPath, queryString Variable 대입
+    public RequestLine(String method, String urlPath, String queryStrings) {
+        // method, urlPath, queryStrings Variable 대입
         this.method = method;
         this.urlPath = urlPath;
-        this.queryString = queryString;
+        this.queryStrings = new QueryStrings(queryStrings);
     }
 
     // Parameter 에서 인자를 받아주는 Method add
@@ -33,10 +33,28 @@ public class RequestLine {
         // urlPath = tokens 의 index 1
         this.urlPath = urlPathTokens[0];
 
-        // 만약 urlPathTokens 의 길이가 2면? queryString Variable 은 urlPathTokens 의 index 1 의 value 를 반환해라!
+        // 만약 urlPathTokens 의 길이가 2면? queryStrings Variable 은 urlPathTokens 의 index 1 의 value 를 반환해라!
         if(urlPathTokens.length == 2) {
-            this.queryString = urlPathTokens[1];
+            this.queryStrings = new QueryStrings(urlPathTokens[1]);
         }
+    }
+
+    // Get Request 을 통해서 True 인지 False 인지 판별하는 작업
+    public boolean isGetRequest() {
+        // GET Method 가 맞는지 String Type 인 method 를 비교 후 값을 반환해줌!
+        // HTTP Protocol 에 맞게 작업하는 과정
+        return "GET".equals(this.method);
+    }
+
+    // matchPath method add
+    public boolean matchPath(String requestPath) {
+        // requestPath 이 urlPath 과 동일한지 아닌지 판별!
+        return urlPath.equals(requestPath);
+    }
+
+    // QueryStrings method add
+    public QueryStrings getQueryStrings() {
+        return this.queryStrings;
     }
 
     // Equals 로 String Type 비교
@@ -45,12 +63,13 @@ public class RequestLine {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RequestLine that = (RequestLine) o;
-        return Objects.equals(method, that.method) && Objects.equals(urlPath, that.urlPath) && Objects.equals(queryString, that.queryString);
+        return Objects.equals(method, that.method) && Objects.equals(urlPath, that.urlPath) && Objects.equals(queryStrings, that.queryStrings);
     }
 
     // HashCode 로 정확하게 String Type 이 True 인지 판별
     @Override
     public int hashCode() {
-        return Objects.hash(method, urlPath, queryString);
+        // method, urlPath, queryString Objects 들을 hashCode 로 변환!
+        return Objects.hash(method, urlPath, queryStrings);
     }
 }
